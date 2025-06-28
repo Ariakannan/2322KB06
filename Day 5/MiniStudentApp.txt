@@ -1,0 +1,61 @@
+import java.util.*;
+import java.io.*;
+
+class MiniStudentApp {
+  ArrayList<String> students = new ArrayList<>();
+  HashMap<String, ArrayList<String>> studentCourses = new HashMap<>();
+
+  void addStudent(String id) {
+    if(!students.contains(id)) {
+      students.add(id);
+      studentCourses.put(id, new ArrayList<>());
+    }
+  }
+
+  void deleteStudent(String id) {
+    students.remove(id);
+    studentCourses.remove(id);
+  }
+
+  void addCourse(String id, String course) {
+    if(studentCourses.containsKey(id)) {
+      studentCourses.get(id).add(course);
+    }
+  }
+
+  void deleteCourse(String id, String course) {
+    if(studentCourses.containsKey(id)) {
+      studentCourses.get(id).remove(course);
+    }
+  }
+
+  boolean searchStudent(String id) {
+    return students.contains(id);
+  }
+
+  void display() {
+    for(String id : students) {
+      System.out.println(id + " : " + studentCourses.get(id));
+    }
+  }
+
+  void saveToFile(String filename) throws IOException {
+    BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+    for(String id : students) {
+      bw.write(id + " : " + studentCourses.get(id));
+      bw.newLine();
+    }
+    bw.close();
+  }
+
+  public static void main(String[] args) throws IOException {
+    MiniStudentApp app = new MiniStudentApp();
+    app.addStudent("S001");
+    app.addStudent("S002");
+    app.addCourse("S001", "Math");
+    app.addCourse("S001", "Physics");
+    app.addCourse("S002", "Chemistry");
+    app.display();
+    app.saveToFile("student_courses.txt");
+  }
+}
